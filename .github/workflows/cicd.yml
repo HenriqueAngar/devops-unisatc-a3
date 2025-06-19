@@ -32,7 +32,7 @@ jobs:
         uses: jakejarvis/wait-action@v0.1.1
         with:
           url: http://localhost:1337/admin
-          timeout: 120
+          timeout: 360
 
       - name: Run Playwright tests
         run: npx playwright test

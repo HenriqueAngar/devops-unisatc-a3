@@ -35,3 +35,6 @@ pnpm build
 ```
 ---
 <sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+
+
+AGORA VAI!!!
