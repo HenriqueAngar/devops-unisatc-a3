@@ -26,19 +26,13 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Start Strapi server in background
-        run: npm run develop &
+        run: npm start &
 
       - name: Wait for Strapi to be ready
-        run: |
-          n=0
-          until [ $n -ge 30 ]; do
-            curl -s http://localhost:1337/admin && break
-            n=$((n+1))
-            sleep 2
-          done
+        uses: jakejarvis/wait-action@v0.1.1
+        with:
+          url: http://localhost:1337/admin
+          timeout: 120
 
       - name: Run Playwright tests
         run: npx playwright test
-
-      - name: Kill Strapi server
-        run: kill $(lsof -t -i:1337)
