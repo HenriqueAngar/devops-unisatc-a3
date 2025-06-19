@@ -1,0 +1,44 @@
+name: CI - Playwright Tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Start Strapi server in background
+        run: npm run develop &
+
+      - name: Wait for Strapi to be ready
+        run: |
+          n=0
+          until [ $n -ge 30 ]; do
+            curl -s http://localhost:1337/admin && break
+            n=$((n+1))
+            sleep 2
+          done
+
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      - name: Kill Strapi server
+        run: kill $(lsof -t -i:1337)
